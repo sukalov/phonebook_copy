@@ -1,0 +1,38 @@
+{
+  "name": "phonebook-server",
+  "version": "1.0.0",
+  "description": "Node server for a phonebook react app. Following exercises from part3 of FullStackOpen course by Matti Luukkainen",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rm -rf build && cd ../FullStackOpen/part2/phonebook && npm run build && cp -r build ../../../FullStackOpen-phonebook-server",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "logs:prod": "fly logs",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "node",
+    "express",
+    "react",
+    "fullstackopen"
+  ],
+  "author": "Matvey Sokolovsky",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongodb": "^5.5.0",
+    "mongoose": "^7.2.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.2.7",
+    "eslint": "^8.41.0",
+    "nodemon": "^2.0.22"
+  }
+}
