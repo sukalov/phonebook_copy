@@ -1,20 +1,16 @@
-import { express } from 'express'
-const app = express()
-import Person from '../models/person'
+import express from 'express'
+import Person from '../models/person.js'
+// import log from '../utils/log.js'
 
-app.get('/info', (request, response) => {
-  Person.find({}).then(persons => {
-    response.send(`<p>Phonebook has ${persons.length} contacts!</p><p>${new Date()}</p>`)
-  })
-})
+const personsRouter = express.Router()
 
-app.get('/api/persons', (request, response) => {
+personsRouter.get('/', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
 })
 
-app.get('/api/persons/:id', (request, response, next) => {
+personsRouter.get('/:id', (request, response, next) => {
   Person.findById(request.params.id).then(res => {
     if (res) {
       response.json(res)
@@ -25,13 +21,13 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(err => next(err))
 })
 
-app.delete('/api/persons/:id', (request, response, next) => {
+personsRouter.delete('//:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(response.status(204).send({ 204: 'no content' }))
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response, next) => {
+personsRouter.post('/', (request, response, next) => {
   if (!request.body.name || !request.body.number) {
     response.status(400).json({
       error: 'content missing'
@@ -44,7 +40,7 @@ app.post('/api/persons', (request, response, next) => {
   }
 })
 
-app.put('/api/persons/:id', (request, response, next) => {
+personsRouter.put('//:id', (request, response, next) => {
   Person.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true, context: 'query' })
     .then(res => {
       response.json(res)
@@ -52,4 +48,4 @@ app.put('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-export default app
+export default personsRouter
