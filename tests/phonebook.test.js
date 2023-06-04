@@ -2,26 +2,15 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
-
+const helper = require('./testHelper')
 const Person = require('../models/person.js')
-
-const initialPersons = [
-  {
-    name: 'Matvey Sokolovsky',
-    number: '000-000-0000',
-  },
-  {
-    name: 'Anatoly Yatskov',
-    number: '123-456-7890',
-  },
-]
 
 beforeEach(async () => {
   await Person.deleteMany({})
-  let personObject = new Person(initialPersons[0])
-  await personObject.save()
-  personObject = new Person(initialPersons[1])
-  await personObject.save()
+  const personObject = helper.initialPersons
+    .map(person => new Person(person))
+  const promiseArray = personObject.map(person => person.save())
+  await Promise.all(promiseArray)
 })
 
 test('persons are returned as json', async () => {
@@ -30,11 +19,13 @@ test('persons are returned as json', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
+
 test('there are all persons', async () => {
   const response = await api.get('/api/persons')
 
-  expect(response.body).toHaveLength(initialPersons.length)
+  expect(response.body).toHaveLength(helper.initialPersons.length)
 })
+
 test('Matvey is within the returned phonebook', async () => {
   const response = await api.get('/api/persons')
 
@@ -43,6 +34,7 @@ test('Matvey is within the returned phonebook', async () => {
     'Matvey Sokolovsky'
   )
 })
+
 test('a valid person can be added', async () => {
   const newPerson = {
     name: 'Alexey Navalny',
@@ -55,14 +47,89 @@ test('a valid person can be added', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/person')
-  const names = response.body.map(r => r.name)
+  const peopleAtEnd = await helper.peopleInDb()
+  expect(peopleAtEnd).toHaveLength(helper.initialPersons.length + 1)
 
-  expect(response.body).toHaveLength(initialPersons.length + 1)
-  expect(names).toContain(
-    'Alexey Navalny'
-  )
+  const names = peopleAtEnd.map(r => r.name)
+  expect(names).toContain('Alexey Navalny')
 })
+
+test('an empty contact cannot be added', async () => {
+  const newPerson = {
+    name: '',
+    number: '',
+  }
+  await api
+    .post('/api/persons')
+    .send(newPerson)
+    .expect(400)
+
+  const peopleAtEnd = await helper.peopleInDb()
+  expect(peopleAtEnd).toHaveLength(helper.initialPersons.length)
+})
+
+test('able to find specific person', async () => {
+  const peopleAtStart = await helper.peopleInDb()
+  const personToView = peopleAtStart[0]
+  const response = await api
+    .get(`/api/persons/${personToView.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  expect(response.body).toEqual(personToView)
+})
+
+test('able to delete a person', async () => {
+  const peopleAtStart = await helper.peopleInDb()
+  const personToDelete = peopleAtStart[0]
+
+  await api
+    .delete(`/api/persons/${personToDelete.id}`)
+    .expect(204)
+
+  const peopleAtEnd = await helper.peopleInDb()
+  expect(peopleAtEnd).toHaveLength(helper.initialPersons.length - 1)
+
+  const names = peopleAtEnd.map(r => r.name)
+  expect(names).not.toContain(personToDelete.name)
+})
+
+test('we cannot update contact with bad data', async () => {
+  const peopleAtStart = await helper.peopleInDb()
+  const personToUpdate = peopleAtStart[0]
+  const badData = {
+    name: '',
+    number: '',
+  }
+
+  await api
+    .put(`/api/persons/${personToUpdate.id}`)
+    .send(badData)
+    .expect(400)
+})
+
+test('we\'re able to update contact', async () => {
+  const peopleAtStart = await helper.peopleInDb()
+  const personToUpdate = peopleAtStart[0]
+
+  const goodData = {
+    name: personToUpdate.name,
+    number: '888-888-8888'
+  }
+
+  await api
+    .put(`/api/persons/${personToUpdate.id}`)
+    .send(goodData)
+    .expect(200)
+
+  const peopleAtEnd = await helper.peopleInDb()
+  expect(peopleAtEnd).toHaveLength(helper.initialPersons.length)
+
+  const numbers = peopleAtEnd.map(r => r.number)
+  expect(numbers).toContain('888-888-8888')
+
+})
+
 
 afterAll(async () => {
   await mongoose.connection.close()
