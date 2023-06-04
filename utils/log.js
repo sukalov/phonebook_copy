@@ -8,33 +8,33 @@ const colors = {
 
 const info = (...props) => {
   let color = 'white'
-  console.log(colors[color], ...props, '\x1b[0m')
+  if (process.env.NODE_ENV !== 'test') console.log(colors[color], ...props, '\x1b[0m')
 }
 const red = (...props) => {
   let color = 'red'
-  console.log(colors[color], ...props, '\x1b[0m')
+  if (process.env.NODE_ENV !== 'test') console.log(colors[color], ...props, '\x1b[0m')
 }
 
 const blue = (...props) => {
   let color = 'blue'
-  console.log(colors[color], ...props, '\x1b[0m')
+  if (process.env.NODE_ENV !== 'test') console.log(colors[color], ...props, '\x1b[0m')
 }
 
 const green = (...props) => {
   let color = 'green'
-  console.log(colors[color], ...props, '\x1b[0m')
+  if (process.env.NODE_ENV !== 'test') console.log(colors[color], ...props, '\x1b[0m')
 }
 
 const yellow = (...props) => {
   let color = 'yellow'
-  console.log(colors[color], ...props, '\x1b[0m')
+  if (process.env.NODE_ENV !== 'test') console.log(colors[color], ...props, '\x1b[0m')
 }
 
 const error = (...props) => {
-  console.error(...props)
+  if (process.env.NODE_ENV !== 'test') console.error(...props)
 }
 
-export default {
+module.exports =  {
   info,
   red,
   blue,

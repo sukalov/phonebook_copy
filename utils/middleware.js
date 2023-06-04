@@ -1,4 +1,4 @@
-import morganLogger from './morganLogger.js'
+const morganLogger = require('./morganLogger.js')
 
 const unknownEndpoint = (request, response) => {
   response.status(404).json({ error: 'completely unknown endpoint' })
@@ -14,7 +14,7 @@ const errorHandler = (error, request, response, next) => {
   }
 }
 
-export default {
+module.exports = {
   errorHandler,
   unknownEndpoint,
   morganLogger,

@@ -1,4 +1,4 @@
-import morgan from 'morgan'
+const morgan = require('morgan')
 
 morgan.token('postContent', (req) => {
   let a
@@ -26,4 +26,4 @@ morgan.token('statusColor', (req, res) => { // original function taken from http
 const morganLogger = morgan(
   ':statusColor :method\x1b[0m \x1b[36m:url\x1b[0m :response-time ms :postContent - length|:res[content-length]',
 )
-export default morganLogger
+module.exports = morganLogger

@@ -1,15 +1,16 @@
-import mongoose from 'mongoose'
-import config from '../utils/config.js'
+const mongoose = require('mongoose')
+const config = require('../utils/config.js')
+const log = require('../utils/log.js')
 
-const url = config.MONGO_URL
+const url = config.MONGODB_URI
 
 mongoose.set('strictQuery', false)
 
-console.log('connecting to', url)
+log.info('connecting to', url)
 mongoose.connect(url)
-  .then(console.log('connected to MongoDB'))
+  .then(log.green('connected to MongoDB'))
   .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
+    log.red('error connecting to MongoDB:', error.message)
   })
 
 const personSchema = new mongoose.Schema({
@@ -40,4 +41,4 @@ personSchema.set('toJSON', {
 
 const Person = mongoose.model('person', personSchema)
 
-export default Person
+module.exports = Person

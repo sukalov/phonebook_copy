@@ -1,13 +1,8 @@
-import mongoose from 'mongoose'
-import * as dotenv from 'dotenv'
-dotenv.config()
-
-const password = process.env.MONGO_KEY
-const url =
-  `mongodb+srv://sukalov:${password}@phonebook.fewzw1c.mongodb.net/phonebook?retryWrites=true&w=majority`
+const mongoose = require('mongoose')
+const config = require('./config.js')
 
 mongoose.set('strictQuery', false)
-mongoose.connect(url)
+mongoose.connect(config.MONGODB_URI)
 
 const personSchema = new mongoose.Schema({
   name: String,
