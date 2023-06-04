@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "name": "Super Mario",
-    "number": "231-00-01"
+    "number": "231-000-0100"
 }
 
 ### update Dan with malformated data

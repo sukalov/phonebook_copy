@@ -3,6 +3,7 @@ const cors =  require('cors')
 const personsRouter =  require('./controllers/persons.js')
 const middleware =  require('./utils/middleware.js')
 const Person =  require('./models/person.js')
+require('express-async-errors')
 
 const app = express()
 
