@@ -1,27 +1,22 @@
-import express from 'express'
-import Person from '../models/person.js'
+const express = require('express')
+const Person = require('../models/person.js')
 // import log from '../utils/log.js'
 
 const personsRouter = express.Router()
 
-personsRouter.get('/', (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons)
-  })
+personsRouter.get('/', async (request, response) => {
+  response.json(await Person.find({}))
 })
 
-personsRouter.get('/:id', (request, response, next) => {
-  Person.findById(request.params.id).then(res => {
-    if (res) {
-      response.json(res)
-    } else {
-      response.status(404).send('error 404: not found')
-    }
-  })
-    .catch(err => next(err))
+personsRouter.get('/:id', async (request, response, next) => {
+  const res = await Person.findById(request.params.id)
+  try {
+    if (res) response.json(res)
+    else response.status(404).send('error 404: not found')
+  } catch (err)  {next(err)}
 })
 
-personsRouter.delete('//:id', (request, response, next) => {
+personsRouter.delete('/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(response.status(204).send({ 204: 'no content' }))
     .catch(error => next(error))
@@ -48,4 +43,4 @@ personsRouter.put('//:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-export default personsRouter
+module.exports = personsRouter
