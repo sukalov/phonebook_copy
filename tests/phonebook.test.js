@@ -22,7 +22,6 @@ test('persons are returned as json', async () => {
 
 test('there are all persons', async () => {
   const response = await api.get('/api/persons')
-
   expect(response.body).toHaveLength(helper.initialPersons.length)
 })
 
@@ -39,6 +38,7 @@ test('a valid person can be added', async () => {
   const newPerson = {
     name: 'Alexey Navalny',
     number: '555-555-5555',
+    userId: '647e6ac1ab36883e7db9d70b'
   }
 
   await api

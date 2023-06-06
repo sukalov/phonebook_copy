@@ -10,8 +10,12 @@ Content-Type: application/json
 
 {
     "name": "Super Mario",
-    "number": "231-000-0100"
+    "number": "231-000-0100",
+    "userId": "647e6ac1ab36883e7db9d70b"
 }
+
+###
+DELETE http://localhost:3001/api/persons/647e5f862b67f6802839982d
 
 ### update Dan with malformated data
 PUT http://localhost:3001/api/persons/64767157a65ec483d2b0c2f5

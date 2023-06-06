@@ -1,6 +1,8 @@
 const express =  require('express')
 const cors =  require('cors')
 const personsRouter =  require('./controllers/persons.js')
+const usersRouter = require('./controllers/users.js')
+const loginRouter = require('./controllers/login.js')
 const middleware =  require('./utils/middleware.js')
 const Person =  require('./models/person.js')
 require('express-async-errors')
@@ -12,6 +14,8 @@ app.use(cors())
 app.use(express.json())
 if (process.env.NODE_ENV !== 'test') app.use(middleware.morganLogger)
 app.use('/api/persons', personsRouter)
+app.use('/api/users', usersRouter)
+app.use('/login', loginRouter)
 
 app.get('/info', (request, response) => {
   Person.find({}).then(persons => {
