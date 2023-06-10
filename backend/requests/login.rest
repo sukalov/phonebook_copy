@@ -14,3 +14,5 @@ Content-Type: application/json
     "username": "root",
     "password": "sekret2"
 }
+###
+DELETE https://bloglist.cyclic.app/api/users/63d53fb650b9342df226fee7
