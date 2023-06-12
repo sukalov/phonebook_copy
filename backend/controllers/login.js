@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/user')
 const config = require('../utils/config')
+const morgan = require('morgan')
+
+loginRouter.use(morgan('dev'))
 
 loginRouter.post('/', async (request, response) => {
   const { username, password } = request.body

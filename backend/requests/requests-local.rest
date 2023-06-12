@@ -17,6 +17,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
 ### 3. add Super Mario with bad number
 POST http://localhost:3001/api/persons
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0N2U2YWMxYWIzNjg4M2U3ZGI5ZDcwYiIsImlhdCI6MTY4NjAxOTI5MH0.60rYc8CCbGtbw7LM9dKBMSpjc-iqf7g9A8swt1LvgDE
 
 {
     "name": "Super Mario",
@@ -24,19 +25,21 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3001/api/persons/647e5f862b67f6802839982d
+DELETE http://localhost:3000/api/persons/6484be5d800ac84bc0c22e06
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0N2U2YWMxYWIzNjg4M2U3ZGI5ZDcwYiIsImlhdCI6MTY4NjAxOTI5MH0.60rYc8CCbGtbw7LM9dKBMSpjc-iqf7g9A8swt1LvgDE
 
 ### update Dan with malformated data
-PUT http://localhost:3001/api/persons/64767157a65ec483d2b0c2f5
+PUT http://localhost:3001/api/persons/6484c3c4c1f4b8702dc48c99
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0N2U2YWMxYWIzNjg4M2U3ZGI5ZDcwYiIsImlhdCI6MTY4NjAxOTI5MH0.60rYc8CCbGtbw7LM9dKBMSpjc-iqf7g9A8swt1LvgDE
 
 {
-    "name": "Daf",
+    "name": "Da",
     "number": "231-000-0000"
 }
 
 ### update with Dan Abramov with GOOD data
-PUT http://localhost:3001/api/persons/64767157a65ec483d2b0c2f5
+PUT http://localhost:3001/api/persons/6484c3c4c1f4b8702dc48c99
 Content-Type: application/json
 
 {

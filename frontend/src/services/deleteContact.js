@@ -12,10 +12,17 @@ const deleteContact = (persons, set, setMessage, person) => {
                 set(personsUpd);
             })
             .catch(e => {
-                setMessage({message: '404: contact already deleted'})
-                setTimeout(()=> setMessage({message: null}), 3000)});
-                personsUpd.splice(index, 1);
-                set(personsUpd);
+                if (e.status === 404) {
+                    setMessage({message: e.body})
+                    setTimeout(()=> setMessage({message: null}), 3000)
+                    personsUpd.splice(index, 1);
+                    set(personsUpd);
+                } else {
+                    console.log(e.response.data.error)
+                    setMessage({message: `${e.response.status}: ${e.response.data.error}`})
+                    setTimeout(()=> setMessage({message: null}), 3000)
+                }
+            })
     }
 }
 

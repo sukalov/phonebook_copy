@@ -39,8 +39,8 @@ personsRouter.delete('/:id', async (req, res) => {
     res.status(401).json({ error: 'authentication required' })
   } else {
     try {
-      const blog = await Person.findById(req.params.id)
-      if (req.user === blog.user.toString()) {
+      const person = await Person.findById(req.params.id)
+      if (req.user === person.user.toString()) {
         await Person.findByIdAndRemove(req.params.id)
         const user = await User.findById(req.user).exec()
         const updatedPersons = user.persons.filter((userPerson) => userPerson.toString() !== req.params.id)
@@ -56,10 +56,26 @@ personsRouter.delete('/:id', async (req, res) => {
 })
 
 
-personsRouter.put('/:id', async (request, response) => {
-  const res = await Person.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true, context: 'query' })
-  if (res) response.json(res)
-  else response.status(404).send('error 404: not found')
+personsRouter.put('/:id', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ error: 'authentication required' })
+  } else {
+    try {
+      const person = await Person.findById(req.params.id)
+      if (req.user === person.user.toString()) {
+        const updated = await Person.findByIdAndUpdate(
+          req.params.id,
+          req.body,
+          { new: true, runValidators: true },
+        )
+        res.send(updated)
+      } else {
+        res.status(401).send({ error: 'non allowed to change other people\'s notes' })
+      }
+    } catch (error) {
+      res.status(404).send({ error: 'content not found' })
+    }
+  }
 })
 
 module.exports = personsRouter

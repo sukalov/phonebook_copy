@@ -12,10 +12,11 @@ const app = express()
 app.use(express.static('build'))
 app.use(cors())
 app.use(express.json())
+app.use('/login', loginRouter)
+
 if (process.env.NODE_ENV !== 'test') app.use(middleware.morganLogger)
 app.use('/api/persons', personsRouter)
 app.use('/api/users', usersRouter)
-app.use('/login', loginRouter)
 
 app.get('/info', (request, response) => {
   Person.find({}).then(persons => {

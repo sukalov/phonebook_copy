@@ -3,7 +3,7 @@ import deleteContact from "../services/deleteContact"
 
 const ContactList = ({ persons, search, set, setMessage }) => {
     return (
-         persons.length > 0 ?
+         persons.length > 0 &&
             <> 
             <h3>Contacts</h3>
             <table style={{marginBottom: 30}}>
@@ -18,13 +18,12 @@ const ContactList = ({ persons, search, set, setMessage }) => {
                 <tr key={person.id}>
                     <td> {person.name}</td>
                     <td> {person.number}</td>
-                    <td><Button text="delete" onClick={() => deleteContact(persons, set, setMessage, person)}/></td>
+                    <td><Button text="delete" onClick={() => deleteContact(persons, set, setMessage, person)} /></td>
                 </tr>
             )}
             </tbody>
             </table>  
-        </> :
-        <h3>You have no contacts yet</h3>
+        </>
         )
 }
 
